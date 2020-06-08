@@ -1,0 +1,34 @@
+<form
+  fxLayout="column"
+  fxLayoutAlign="center center"
+  #f="ngForm"
+  (ngSubmit)="onSubmit(f)"
+>
+  <mat-form-field>
+    <!-- <mat-label>Favorite food</mat-label> -->
+    <input type="text" matInput placeholder="Your email" ngModel name="name" />
+  </mat-form-field>
+
+  <mat-form-field hintLabel="Should be 6  min">
+    <!-- <mat-label>Leave a comment</mat-label> -->
+    <input
+      type="password"
+      matInput
+      placeholder="Password"
+      ngModel
+      name="password"
+      #pwInput
+      required
+    />
+    <mat-hint align="end"> {{ pwInput.value?.length }}/6</mat-hint>
+    <mat-error>oh no no no </mat-error>
+  </mat-form-field>
+  <button
+    type="submit"
+    mat-raised-button
+    color="primary"
+    [disabled]="f.invalid"
+  >
+    Submit
+  </button>
+</form>

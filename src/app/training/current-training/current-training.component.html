@@ -1,0 +1,6 @@
+<section fxLayout = column fxLayoutAlign = "center center">
+    <mat-progress-spinner mode = "determinate" [value] = "progress"></mat-progress-spinner>
+    <h1> {{progress}}</h1>
+    <p>You can NOT do it ! you are a failure </p>
+    <button (click) = "onStop()" mat-raised-button color = "accent">Give up</button>
+</section>
