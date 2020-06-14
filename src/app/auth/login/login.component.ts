@@ -10,7 +10,7 @@ import { NgForm, FormGroup, FormControl, Validators } from '@angular/forms';
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
 
-  constructor() { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
     this.loginForm = new FormGroup({
@@ -21,7 +21,10 @@ export class LoginComponent implements OnInit {
     });
   }
   onSubmit(){
-    // this.authService.login()
+    this.authService.login({
+      email: this.loginForm.get('email'),
+      password: this.loginForm.get('password')
+    })
   }
 
 }
