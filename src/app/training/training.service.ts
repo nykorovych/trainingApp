@@ -1,20 +1,42 @@
 import { Exercise } from './exercise.model';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { AngularFirestore } from 'angularfire2/firestore';
+import { map } from 'rxjs/operators';
 
+@Injectable()
 export class TrainingService {
   exerciseChanged = new Subject<Exercise>();
-  availableExercises: Exercise[] = [
-    { id: 'crunches', name: 'Crunches', duration: 30, calories: 8 },
-    { id: 'touch-toes', name: 'Touch Toes', duration: 180, calories: 15 },
-    { id: 'side-lunges', name: 'Side Lunges', duration: 120, calories: 18 },
-    { id: 'burpees', name: 'Burpees', duration: 60, calories: 8 },
-  ];
+  availableExercises: Exercise[] = [];
+  exercisesChanged = new Subject<Exercise[]>();
+
+  constructor(private db: AngularFirestore) {}
+
   private runningExercise: Exercise;
   private exercise = [];
 
-  getAvailableExercises() {
-    return this.availableExercises.slice();
+  fetchtAvailableExercises() {
+    this.db
+      .collection('availableExercises')
+      .snapshotChanges()
+      .pipe(
+        map((docArray: any) => {
+          return docArray.map((arr) => {
+            return {
+              id: arr.payload.doc.id,
+              name: arr.payload.doc.data().name,
+              duration: arr.payload.doc.data().duration,
+              calories: arr.payload.doc.data().calories,
+            };
+          });
+        })
+      )
+      .subscribe((res: Exercise[]) => {
+        this.availableExercises = res;
+        this.exercisesChanged.next([...this.availableExercises]);
+      });
   }
+
   startExercise(selectedId) {
     this.runningExercise = this.availableExercises.find(
       (exercise) => exercise.id === selectedId
@@ -43,7 +65,7 @@ export class TrainingService {
     this.runningExercise = null;
     this.exerciseChanged.next(null);
   }
-  getCompletedOrCancelledExercises(){
-    return this.exercise.slice()
+  getCompletedOrCancelledExercises() {
+    return this.exercise.slice();
   }
 }
