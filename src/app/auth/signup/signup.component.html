@@ -16,9 +16,10 @@
       />
     </mat-form-field>
 
-    <mat-form-field hintLabel="Should be 6  min">
+    <mat-form-field  hintLabel="Should be 6  min">
       <!-- <mat-label>Leave a comment</mat-label> -->
       <input
+        class="inputt"
         type="password"
         matInput
         placeholder="Password"
@@ -33,11 +34,27 @@
 
     <mat-form-field>
       <!-- <mat-label>Choose a date</mat-label> -->
-      <input matInput [matDatepicker]="picker" placeholder="Your birthday" [max] = "maxDate"ngModel name = "birthday"/>
+      <input
+        matInput
+        [matDatepicker]="picker"
+        placeholder="Your birthday"
+        [max]="maxDate"
+        ngModel
+        name="birthday"
+      />
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
-    <mat-checkbox ngModel name = "check" labelPosition="before" color = "primary">Agree</mat-checkbox>
-    <button type="submit" mat-raised-button color="primary" [disabled] = "f.invalid ">Submit</button>
+    <mat-checkbox ngModel name="check" labelPosition="before" color="primary"
+      >Agree</mat-checkbox
+    >
+    <button
+      type="submit"
+      mat-raised-button
+      color="primary"
+      [disabled]="f.invalid"
+    >
+      Submit
+    </button>
   </form>
 </section>

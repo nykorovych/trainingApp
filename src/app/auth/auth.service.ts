@@ -5,13 +5,15 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { TrainingService } from '../training/training.service';
+import { UIService } from '../shared/ui.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private router: Router,
     private afAuth: AngularFireAuth,
-    private trainingService: TrainingService
+    private trainingService: TrainingService,
+    private uiService: UIService
   ) {}
   authChange = new Subject<boolean>();
   private authenticated = false;
@@ -24,18 +26,22 @@ export class AuthService {
         console.log(res);
       })
       .catch((err) => {
-        console.log(err);
+        this.uiService.showSnackBar(err,null, 2000)
       });
   }
   login(authData: AuthData) {
+    this.uiService.loadingStateChanged.next(true)
     this.afAuth.auth
       .signInWithEmailAndPassword(authData.email, authData.password)
       .then((res) => {
+        this.uiService.loadingStateChanged.next(false)
         this.initAuthListener();
         console.log(res);
       })
       .catch((err) => {
-        console.log(err);
+        this.uiService.loadingStateChanged.next(false)
+        this.uiService.showSnackBar(err,null, 2000)
+        
       });
   }
   logout() {

@@ -3,6 +3,8 @@ import { Subject, Subscription } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { map } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { UIService } from '../shared/ui.service';
 
 @Injectable()
 export class TrainingService {
@@ -14,7 +16,7 @@ export class TrainingService {
   private runningExercise: Exercise;
   private exercise = [];
 
-  constructor(private db: AngularFirestore) {}
+  constructor(private db: AngularFirestore, private uiService: UIService) {}
   fetchtAvailableExercises() {
     this.fbSubs.push(
       this.db
@@ -36,6 +38,8 @@ export class TrainingService {
           console.log(res);
           this.availableExercises = res;
           this.exercisesChanged.next([...this.availableExercises]);
+        }, error => {
+          this.uiService.showSnackBar('Fetching failed try again', null, 3000)
         })
     );
   }
